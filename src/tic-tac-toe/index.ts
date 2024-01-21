@@ -42,8 +42,8 @@ function checkWinner(ground: number[]) {
   // Итерируем 1 это игрок -1 это нейронка
   for (const c of [1, -1]) {
     // Если ячейки по диагонали равны текущему юзеру
-    if ([0, 4, 9].map(e => ground[e]).every(e => e == c) ||
-        [3, 4, 7].map(e => ground[e]).every(e => e == c)) {
+    if ([0, 4, 8].map(e => ground[e]).every(e => e == c) ||
+        [2, 4, 6].map(e => ground[e]).every(e => e == c)) {
           return c;
     }
     // Либо все столбцы равны
