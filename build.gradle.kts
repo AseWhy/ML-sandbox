@@ -34,6 +34,8 @@ dependencies {
     implementation("org.bytedeco:javacv:1.5.7")
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("org.slf4j:slf4j-log4j12:$slf4jVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.9.2")
 }
 
 distributions {

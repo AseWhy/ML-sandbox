@@ -10,7 +10,7 @@ public class DeepLearningUtils {
      * @param array массив чисел
      * @return индекс наибольшего значения
      */
-    public static int getIndexOfLargestValue( double[] array ) {
+    public static int getIndexOfLargestValue(double[] array) {
         if (array == null || array.length == 0) {
             return -1;
         }

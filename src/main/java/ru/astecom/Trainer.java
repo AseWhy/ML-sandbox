@@ -13,13 +13,13 @@ public class Trainer {
     /** Логгер */
     private static final Logger log = LoggerFactory.getLogger(Trainer.class);
 
-    /** Набор обучающих обхектов */
-    private static final ModelTrainer[] MODEL_TRAINERS = { new WebcamModelTrainer() };
-
     /** Конфигурация приложения */
     static {
         ApplicationConfigure.configure();
     }
+
+    /** Набор обучающих обхектов */
+    private static final ModelTrainer[] MODEL_TRAINERS = { new WebcamModelTrainer() };
 
     /**
      * Точка входа в процесс

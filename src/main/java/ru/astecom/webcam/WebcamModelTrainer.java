@@ -43,7 +43,16 @@ public class WebcamModelTrainer implements ModelTrainer {
 
     @Override
     public void train() {
-        detector.trainMnist();
+        try {
+            var ds = new MnistDataSetIterator(128, true, (int) WebcamNumberDetector.RNG_SEED);
+            try {
+                detector.train(ds, 10);
+            } finally {
+                ds.close();
+            }
+        } catch (IOException e) {
+            log.error("Ошибка при обучении модели на базе МНИСТ", e);
+        }
     }
 
     @Override
