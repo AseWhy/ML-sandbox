@@ -28,12 +28,14 @@ public class Trainer {
     public static void main(String[] args) {
         log.info("Начинаю обучение {} моделей", MODEL_TRAINERS.length);
         for (var current : MODEL_TRAINERS) {
+            current.start();
             log.info("Запуск обучения модели '{}'", current.getModelName());
             current.train();
             log.info("Обучение завершено, вывожу метрики тестирования точности для модели '{}'", current.getModelName());
             current.printMetrics();
             log.info("Сохраняю модель '{}'", current.getModelName());
             current.save();
+            current.close();
         }
         log.info("Обучение завершено.");
     }

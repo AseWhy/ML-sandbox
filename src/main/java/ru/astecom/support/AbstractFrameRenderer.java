@@ -7,8 +7,6 @@ import ru.astecom.FrameRenderer;
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.Closeable;
-import java.io.IOException;
 
 /**
  * Абстрактный класс для отрисовки фрейма
@@ -32,15 +30,13 @@ public abstract class AbstractFrameRenderer extends JFrame implements FrameRende
 
         @Override
         public void windowClosing(WindowEvent e) {
-            if (AbstractFrameRenderer.this instanceof Closeable c) {
-                try {
-                    log.info(String.format("Выполняю очистку ресурсов для окна %s", getTitle()));
-                    c.close();
-                    log.info(String.format("Очистка ресурсов для окна %s завершена", getTitle()));
-                } catch (IOException ex) {
-                    log.error(String.format("Ошибка при выполнении очистки ресурсов окна: %s", getTitle()), ex);
-                }
+            var renderer = AbstractFrameRenderer.this;
+            if (!renderer.isRunning()) {
+                return;
             }
+            log.info(String.format("Выполняю очистку ресурсов для окна %s", renderer.getTitle()));
+            renderer.stop();
+            log.info(String.format("Очистка ресурсов для окна %s завершена", renderer.getTitle()));
         }
     }
 }

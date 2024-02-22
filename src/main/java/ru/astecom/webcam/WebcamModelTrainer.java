@@ -20,7 +20,7 @@ public class WebcamModelTrainer implements ModelTrainer {
     private static final Logger log = LoggerFactory.getLogger(WebcamModelTrainer.class);
 
     /** Обнаружитель чисел */
-    private final WebcamNumberDetector detector = new WebcamNumberDetector();
+    private WebcamNumberDetector detector;
 
     @Override
     public String getModelName() {
@@ -28,7 +28,13 @@ public class WebcamModelTrainer implements ModelTrainer {
     }
 
     @Override
+    public void start() {
+        detector = new WebcamNumberDetector();
+    }
+
+    @Override
     public void printMetrics() {
+        checkDetectorAvailable();
         try {
             var ds = new MnistDataSetIterator(128, false, (int) WebcamNumberDetector.RNG_SEED);
             try {
@@ -43,6 +49,7 @@ public class WebcamModelTrainer implements ModelTrainer {
 
     @Override
     public void train() {
+        checkDetectorAvailable();
         try {
             var ds = new MnistDataSetIterator(128, true, (int) WebcamNumberDetector.RNG_SEED);
             try {
@@ -57,6 +64,21 @@ public class WebcamModelTrainer implements ModelTrainer {
 
     @Override
     public void save() {
+        checkDetectorAvailable();
         detector.save(ApplicationHelper.getModelPath(MODEL_FILE_NAME));
+    }
+
+    @Override
+    public void close() {
+        detector = null;
+    }
+
+    /**
+     * Проверить доступность детектора
+     */
+    private void checkDetectorAvailable() {
+        if (detector == null) {
+            throw new RuntimeException("detector - null. Метод start был запущен?");
+        }
     }
 }

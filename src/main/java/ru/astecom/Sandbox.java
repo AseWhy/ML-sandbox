@@ -4,13 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.astecom.support.ApplicationConfigure;
 import ru.astecom.support.ApplicationHelper;
+import ru.astecom.tic_tac.TicTacRenderer;
 import ru.astecom.webcam.WebcamRenderer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.Closeable;
-import java.io.IOException;
 
 /**
  * Класс точка входа в приложение
@@ -28,6 +27,7 @@ public class Sandbox extends JFrame {
      */
     public Sandbox(FrameRenderer[] renderers) {
         setTitle("ml-sandbox");
+        setLayout(new GridBagLayout());
         this.renderers = renderers;
         log.info("Инициализация активности ml-snabox с {} отрисовщиками", renderers.length);
     }
@@ -49,7 +49,8 @@ public class Sandbox extends JFrame {
      * Построить список кнопок запускающие другие отрисовщики
      */
     public void buildButtonList() {
-        var pane = new Panel();
+        var pane = new Panel(new GridLayout(0, 1, 0, 15));
+        pane.setSize(getWidth(), getHeight());
         for (var current : renderers) {
             var button = new JButton();
             button.setAction(new FrameRendererAction(current));
@@ -64,7 +65,7 @@ public class Sandbox extends JFrame {
     }
 
     /** Список отрисовщиков */
-    private static final FrameRenderer[] FRAME_RENDERERS = { new WebcamRenderer() };
+    private static final FrameRenderer[] FRAME_RENDERERS = { new WebcamRenderer(), new TicTacRenderer() };
 
     /**
      * Точка входа в приложение
@@ -81,15 +82,12 @@ public class Sandbox extends JFrame {
      */
     private static void close() {
         for (var current : FRAME_RENDERERS) {
-            if (current instanceof Closeable c) {
-                try {
-                    log.info(String.format("Выполняю очистку ресурсов для окна %s", current.getTitle()));
-                    c.close();
-                    log.info(String.format("Очистка ресурсов для окна %s завершена", current.getTitle()));
-                } catch (IOException e) {
-                    log.error(String.format("Ошибка при выполнении очистки ресурсов окна: %s", current.getTitle()), e);
-                }
+            if (!current.isRunning()) {
+                continue;
             }
+            log.info(String.format("Выполняю очистку ресурсов для окна %s", current.getTitle()));
+            current.stop();
+            log.info(String.format("Очистка ресурсов для окна %s завершена", current.getTitle()));
         }
     }
 

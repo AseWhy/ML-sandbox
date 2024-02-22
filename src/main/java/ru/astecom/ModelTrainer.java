@@ -12,6 +12,11 @@ public interface ModelTrainer {
     String getModelName();
 
     /**
+     * Инициализация тренера
+     */
+    void start();
+
+    /**
      * Напечатать метрики обучения модели
      */
     void printMetrics();
@@ -25,4 +30,9 @@ public interface ModelTrainer {
      * Сохраняет модель в папку с моделями
      */
     void save();
+
+    /**
+     * Очистка ресурсов
+     */
+    void close();
 }

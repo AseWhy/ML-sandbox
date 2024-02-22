@@ -12,6 +12,9 @@ version = "1.0-SNAPSHOT"
 /** Версия пакета ml4j */
 var ml4jVersion = "1.0.0-M2.1";
 
+/** Версия пакета rl4j */
+var rl4jVersion = "1.0.0-M1.1";
+
 /** Платформа пакета ml4j */
 var ml4jPlatform = "nd4j-native";
 
@@ -23,14 +26,11 @@ repositories {
 }
 
 dependencies {
-    implementation("org.deeplearning4j:deeplearning4j-core:$ml4jVersion") {
-        // Плагины нам не нужны
-        exclude(group = "com.twelvemonkeys.imageio", module = "imageio-jpeg")
-        exclude(group = "com.twelvemonkeys.imageio", module = "imageio-tiff")
-        exclude(group = "com.twelvemonkeys.imageio", module = "imageio-psd")
-    }
+    implementation("org.deeplearning4j:deeplearning4j-core:$ml4jVersion")
     implementation(group = "org.nd4j", name = ml4jPlatform, version = ml4jVersion)
     implementation(group = "org.nd4j", name = ml4jPlatform, version = ml4jVersion, classifier = "linux-x86_64")
+    implementation("org.deeplearning4j:rl4j-core:$rl4jVersion")
+    implementation("org.deeplearning4j:rl4j-api:$rl4jVersion")
     implementation("org.bytedeco:javacv:1.5.7")
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("org.slf4j:slf4j-log4j12:$slf4jVersion")
@@ -64,7 +64,12 @@ tasks {
         useJUnitPlatform()
     }
 
+    register("mkdirs") {
+        mkdir("models")
+    }
+
     register("train", JavaExec::class) {
+        dependsOn("mkdirs")
         group = "Execution"
         description = "Обучение иющихся моделей, для дальнейшего использования"
         classpath = sourceSets["main"].runtimeClasspath;
@@ -72,6 +77,7 @@ tasks {
     }
 
     register("run", JavaExec::class) {
+        dependsOn("mkdirs")
         group = "Execution"
         description = "Запуск песочницы"
         classpath = sourceSets["main"].runtimeClasspath;

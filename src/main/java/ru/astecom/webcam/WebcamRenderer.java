@@ -8,12 +8,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.Closeable;
 
 /**
  * Класс для отрисовки изображения с вебкамеры и результатов обнаружения
  */
-public class WebcamRenderer extends AbstractFrameRenderer implements Closeable {
+public class WebcamRenderer extends AbstractFrameRenderer {
 
     /** Таймер отрисовки */
     private final Timer timer;
@@ -57,7 +56,12 @@ public class WebcamRenderer extends AbstractFrameRenderer implements Closeable {
     }
 
     @Override
-    public void close() {
+    public boolean isRunning() {
+        return timer.isRunning();
+    }
+
+    @Override
+    public void stop() {
         timer.stop();
         webcamGrabber.stop();
         getContentPane().remove(drawer);
