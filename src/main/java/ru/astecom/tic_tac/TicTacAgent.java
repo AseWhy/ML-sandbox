@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package ru.astecom.tic_tac;
 
 import org.deeplearning4j.gym.StepReply;
@@ -27,11 +22,11 @@ public class TicTacAgent implements MDP<TicTacState, Integer, DiscreteSpace> {
     /** Генератор действий */
     private final DiscreteSpace discreteSpace;
 
-    /** Номер игрока агента */
-    private final int agentPlayer;
-
     /** Состояние игрового поля */
     private final ArrayObservationSpace<TicTacState> gameArrayObservationSpace;
+
+    /** Номер игрока агента */
+    private final int agentPlayer;
 
     /**
      * Конструктор
@@ -101,7 +96,7 @@ public class TicTacAgent implements MDP<TicTacState, Integer, DiscreteSpace> {
         if (result == TicTacGame.StepResult.CONTINUE) {
             double reward = 0;
             int allied = 0, enemy = 0;
-            // Добавляем вознаградение, если соседние клетки заняты текущим игроком и отнимает если заняты другим игроком
+            // Добавляем вознаграждение, если соседние клетки заняты текущим игроком и отнимаем если заняты другим игроком
             for (int ox = -1; ox < 2; ox++) {
                 for (int oy = -1; oy < 2; oy++) {
                     int cx = x - ox;
@@ -123,9 +118,9 @@ public class TicTacAgent implements MDP<TicTacState, Integer, DiscreteSpace> {
             return reward;
         }
         return switch (result) {
-            case WINNER_1 -> -2.5;
+            case WINNER_1 -> -5;
             case WINNER_2 -> 5;
-            case BLOCKED -> -5;
+            case BLOCKED -> -1;
             case DRAW -> 0;
             default -> throw new IllegalStateException("Неожиданное значение: " + result);
         };

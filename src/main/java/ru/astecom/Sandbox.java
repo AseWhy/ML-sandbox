@@ -2,6 +2,7 @@ package ru.astecom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.astecom.snake.SnakeRenderer;
 import ru.astecom.support.ApplicationConfigure;
 import ru.astecom.support.ApplicationHelper;
 import ru.astecom.tic_tac.TicTacRenderer;
@@ -65,7 +66,8 @@ public class Sandbox extends JFrame {
     }
 
     /** Список отрисовщиков */
-    private static final FrameRenderer[] FRAME_RENDERERS = { new WebcamRenderer(), new TicTacRenderer() };
+    private static final FrameRenderer[] FRAME_RENDERERS = { new WebcamRenderer(), new TicTacRenderer(),
+            new SnakeRenderer() };
 
     /**
      * Точка входа в приложение

@@ -15,10 +15,10 @@ import java.awt.event.ActionListener;
 public class WebcamRenderer extends AbstractFrameRenderer {
 
     /** Таймер отрисовки */
-    private final Timer timer;
+    private Timer timer;
 
     /** Компонент отрисовки интерфейса */
-    private final Drawer drawer;
+    private Drawer drawer;
 
     /** Сборщик кадров */
     private final WebcamGrabber webcamGrabber = new WebcamGrabber(0);
@@ -32,8 +32,6 @@ public class WebcamRenderer extends AbstractFrameRenderer {
     public WebcamRenderer() {
         super();
         setTitle("Распознование чисел с веб камеры");
-        timer = new Timer(50, new DrawerListener());
-        drawer = new Drawer();
     }
 
     /**
@@ -41,8 +39,10 @@ public class WebcamRenderer extends AbstractFrameRenderer {
      */
     private void startDraw() {
         detector = new WebcamNumberDetector(28, 28, ApplicationHelper.getModelPath(WebcamModelTrainer.MODEL_FILE_NAME));
+        drawer = new Drawer();
         getContentPane().add(drawer);
         webcamGrabber.start();
+        timer = new Timer(50, new DrawerListener());
         timer.start();
     }
 
@@ -57,7 +57,7 @@ public class WebcamRenderer extends AbstractFrameRenderer {
 
     @Override
     public boolean isRunning() {
-        return timer.isRunning();
+        return timer != null;
     }
 
     @Override
@@ -65,6 +65,9 @@ public class WebcamRenderer extends AbstractFrameRenderer {
         timer.stop();
         webcamGrabber.stop();
         getContentPane().remove(drawer);
+        detector = null;
+        drawer = null;
+        timer = null;
     }
 
     /**

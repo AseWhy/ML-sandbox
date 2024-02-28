@@ -45,6 +45,7 @@ public class TicTacRenderer extends AbstractFrameRenderer {
     public void stop() {
         getContentPane().remove(board);
         agent.close();
+        trainer.close();
         agent = null;
         trainer = null;
         game = null;
